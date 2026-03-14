@@ -10,10 +10,8 @@ Painner คือระบบจัดการโปรเจกต์ที่
 ### นายภูวฤทธิ์ เจริญพล (6609650590) 
 1. 
   * API Endpoint : 
-  * Description :
 2.
   * API Endpoint :
-  * Description :
 ### นายรพินทร์ นะราช (6609650624)
 1. get all chat message
   * API Endpoint : /api/chats/{chatId}/messages
@@ -22,17 +20,13 @@ Painner คือระบบจัดการโปรเจกต์ที่
 ### นายศุภณัฐ ตั้งกิจวุฒิกล (6609650665) 
 1. 
   * API Endpoint : 
-  * Description :
 2.
   * API Endpoint :
-  * Description :
 ### นายสุทธิพจน์ ประทุมทอง (6609650699) 
-1. 
-  * API Endpoint : 
-  * Description :
-2.
-  * API Endpoint :
-  * Description :
+1. view all memebers in project
+  * API Endpoint : /api/projects/{projectId}/members
+2. delete task
+  * API Endpoint : /api/tasks/{taskId}
 ### นายสุรบดี ผาสุข (6609650707)
 1. edit task
   * API Endpoint : /api/tasks/{taskId}
