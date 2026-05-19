@@ -10,6 +10,8 @@ const userRoutes    = require('./routes/userRoutes');
 const projectRoutes = require('./routes/projectRoutes');
 const teamRoutes    = require('./routes/teamRoutes');
 const errorHandler  = require('./middleware/errorHandler');
+const boardRoutes = require('./routes/boardRoutes');
+
 
 const app = express();
 
@@ -20,6 +22,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/teams',    teamRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/boards', boardRoutes);
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
