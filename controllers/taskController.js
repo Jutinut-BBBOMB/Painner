@@ -16,6 +16,30 @@ const getTask = async (req, res) => {
     res.json({ success: true, data: task });
 };
 
+// POST /api/boards/:boardId/tasks  — create task in board
+const createTask = async (req, res) => {
+    const { boardId } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(boardId))
+    return res.status(400).json({ success: false, message: 'Invalid boardId' });
+
+    const { title, description, status, category, assigneeId, projectId, dueDate } = req.body;
+    if (!title || !title.trim())
+    return res.status(400).json({ success: false, message: 'title is required' });
+    if (!category)
+    return res.status(400).json({ success: false, message: 'category is required' });
+    if (!projectId)
+    return res.status(400).json({ success: false, message: 'projectId is required' });
+
+    const task = await Task.create({
+    title: title.trim(), description: description || '',
+    status: status || 'todo', category,
+    assigneeId: assigneeId || null, projectId, boardId,
+    dueDate: dueDate || null, createdBy: req.user.userId,
+    });
+    const populated = await task.populate('assigneeId', 'firstName lastName username avatarColor');
+    res.status(201).json({ success: true, message: 'Task created', data: populated });
+};
+
 // PUT /api/tasks/:taskId  — edit task (CS367 feature, PUT per diagram)
 const editTask = async (req, res) => {
     const { taskId } = req.params;
@@ -50,4 +74,4 @@ const deleteTask = async (req, res) => {
     res.json({ success: true, message: 'Task deleted' });
 };
 
-module.exports = { getTask, editTask, deleteTask };
+module.exports = { getTask, createTask, editTask, deleteTask };
