@@ -1,4 +1,4 @@
-const jwt  = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -30,4 +30,10 @@ const login = async (req, res) => {
   res.json({ success: true, token, user: user.toSafe() });
 };
 
-module.exports = { register, login };
+const getMe = async (req, res) => {
+  const user = await User.findById(req.user.userId).select('-password');
+  if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+  res.json({ success: true, data: user });
+};
+
+module.exports = { register, login, getMe };
