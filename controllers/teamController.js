@@ -29,4 +29,31 @@ const getTeamMembers = async (req, res) => {
     res.json({ success: true, data });
 };
 
-module.exports = { getMyTeams, createTeam, getTeamMembers };
+// POST /api/teams/:teamId/members
+const addTeamMember = async (req, res) => {
+  const { email, role } = req.body;
+  if (!email) return res.status(400).json({ success: false, message: 'Email required' });
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+  const member = await TeamMember.create({ teamId: req.params.teamId, userId: user._id, role: role || 'Member' });
+  res.status(201).json({ success: true, data: member });
+};
+
+// DELETE /api/teams/:teamId/members/:userId
+const removeTeamMember = async (req, res) => {
+  await TeamMember.findOneAndDelete({ teamId: req.params.teamId, userId: req.params.userId });
+  res.json({ success: true, message: 'Member removed' });
+};
+
+// PATCH /api/teams/:teamId/members/:userId
+const updateTeamMember = async (req, res) => {
+  const { role } = req.body;
+  const member = await TeamMember.findOneAndUpdate(
+    { teamId: req.params.teamId, userId: req.params.userId },
+    { $set: { role } }, { new: true }
+  );
+  if (!member) return res.status(404).json({ success: false, message: 'Member not found' });
+  res.json({ success: true, data: member });
+};
+
+module.exports = { getMyTeams, createTeam, getTeamMembers, addTeamMember, removeTeamMember, updateTeamMember };
