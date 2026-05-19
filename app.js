@@ -16,8 +16,6 @@ app.use('/api/auth', authRoutes);
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
-app.use(errorHandler);
-
 if (require.main === module) {
   const PORT      = process.env.PORT || 5000;
   const MONGO_URI = process.env.MONGO_URI;
