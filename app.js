@@ -1,0 +1,33 @@
+require('dotenv').config();
+require('express-async-errors');
+
+const express  = require('express');
+const mongoose = require('mongoose');
+const cors     = require('cors');
+
+const authRoutes    = require('./routes/authRoutes');
+
+const app = express();
+
+app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000', credentials: true }));
+app.use(express.json());
+
+app.use('/api/auth', authRoutes);
+
+app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+
+app.use(errorHandler);
+
+if (require.main === module) {
+  const PORT      = process.env.PORT || 5000;
+  const MONGO_URI = process.env.MONGO_URI;
+
+  mongoose.connect(MONGO_URI)
+    .then(() => {
+      console.log('MongoDB connected');
+      app.listen(PORT, () => console.log(`Server on http://localhost:${PORT}`));
+    })
+    .catch(err => { console.error(err); process.exit(1); });
+}
+
+module.exports = app;
