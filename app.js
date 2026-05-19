@@ -7,8 +7,12 @@ const cors = require('cors');
 
 const authRoutes = require('./routes/authRoutes');
 const userRoutes    = require('./routes/userRoutes');
+const projectRoutes = require('./routes/projectRoutes');
 const teamRoutes    = require('./routes/teamRoutes');
+const chatRoutes    = require('./routes/chatRoutes');
 const errorHandler  = require('./middleware/errorHandler');
+const boardRoutes = require('./routes/boardRoutes');
+
 
 const app = express();
 
@@ -18,6 +22,9 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/teams',    teamRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/boards', boardRoutes);
+app.use('/api/chats',    chatRoutes);
 
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
