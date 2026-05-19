@@ -34,5 +34,19 @@ const updateProject = async (req, res) => {
   res.json({ success: true, data: project });
 };
 
+// DELETE /api/projects/:projectId
+const deleteProject = async (req, res) => {
+  await Project.findByIdAndDelete(req.params.projectId);
+  await Task.deleteMany({ projectId: req.params.projectId });
+  res.json({ success: true, message: 'Project deleted' });
+};
 
-module.exports = { getProjects, getProject, createProject, updateProject};
+// GET /api/projects/:projectId/stats
+const getProjectStats = async (req, res) => {
+  const tasks = await Task.find({ projectId: req.params.projectId });
+  const stats = { todo: 0, inprogress: 0, review: 0, done: 0, total: tasks.length };
+  tasks.forEach(t => { stats[t.status] = (stats[t.status] || 0) + 1; });
+  res.json({ success: true, data: stats });
+};
+
+module.exports = { getProjects, getProject, createProject, updateProject, deleteProject, getProjectStats};

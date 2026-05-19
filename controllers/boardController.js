@@ -56,4 +56,28 @@ const deleteBoard = async (req, res) => {
     res.json({ success: true, message: 'Board and its tasks deleted' });
 };
 
-module.exports = { getBoard, getTasksByBoard, updateBoard, deleteBoard };
+// ── GET /api/projects/:projectId/boards ──────────────────────────────────────
+// view all boards in project
+const getBoardsByProject = async (req, res) => {
+  const { projectId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(projectId))
+    return res.status(400).json({ success: false, message: 'Invalid projectId' });
+
+  const boards = await Board.find({ projectId }).sort({ createdAt: 1 });
+  res.json({ success: true, data: boards });
+};
+
+const createBoard = async (req, res) => {
+  const { projectId } = req.params;
+  const { name } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(projectId))
+    return res.status(400).json({ success: false, message: 'Invalid projectId' });
+  if (!name || !name.trim())
+    return res.status(400).json({ success: false, message: 'Board name is required' });
+
+  const board = await Board.create({ name: name.trim(), projectId, createdBy: req.user.userId });
+  res.status(201).json({ success: true, message: 'Board created', data: board });
+};
+
+module.exports = { getBoard, getTasksByBoard, updateBoard, deleteBoard, getBoardsByProject, createBoard };
