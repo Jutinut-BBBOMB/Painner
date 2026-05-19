@@ -30,4 +30,18 @@ const sendMessage = async (req, res) => {
   res.status(201).json({ success: true, data: populated });
 };
 
-module.exports = { getMessages, sendMessage };
+// GET /api/projects/:projectId/chats — get project chat room
+const getProjectChat = async (req, res) => {
+  const { projectId } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(projectId))
+    return res.status(400).json({ success: false, message: 'Invalid projectId' });
+
+  // Find or auto-create the chat room for this project
+  let chat = await ProjectChat.findOne({ projectId });
+  if (!chat) {
+    chat = await ProjectChat.create({ projectId });
+  }
+  res.json({ success: true, data: chat });
+};
+
+module.exports = { getMessages, sendMessage, getProjectChat };
