@@ -13,6 +13,7 @@ const chatRoutes    = require('./routes/chatRoutes');
 const errorHandler  = require('./middleware/errorHandler');
 const boardRoutes = require('./routes/boardRoutes');
 const taskRoutes    = require('./routes/taskRoutes');
+const memberRoutes  = require('./routes/memberRoutes');
 
 
 const app = express();
@@ -24,6 +25,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/teams',    teamRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/projects', memberRoutes); 
 app.use('/api/boards', boardRoutes);
 app.use('/api/tasks',    taskRoutes);
 app.use('/api/chats',    chatRoutes);
